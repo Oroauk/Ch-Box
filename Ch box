@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+struct Chbox
+{
+	int data[11];
+	int dep;
+	int last;
+	int re;
+}chbox[999];
+int io[99];
+int head=0,tail=1;
+void go(void)
+{
+	int i=0;
+	while(chbox[tail].last!=NULL)
+	{
+		io[i]=tail;
+		tail=chbox[tail].last;
+		i++;
+	}
+	io[i]=1;
+	while(i>=0)
+	{
+		for(int m=1;m<=10;m++)
+			cout<<chbox[i].data[m]<<" ";
+		cout<<endl<<endl;
+	}
+}
+void judge(void)
+{
+	int i=1;
+	while(chbox[tail].data[i]==1)
+	{
+		if(chbox[tail].data[i]==0)
+		{
+			i=i+2;
+			while(chbox[tail].data[i]==2)
+			{
+				if(i==10)
+					go();
+				i++;
+			}
+		}
+		i++;
+	}
+}
+int main()
+{
+	int j,zero;
+	chbox[1]={{0,2,1,2,1,0,0,2,1,1,2},1,0,-1};
+	for(int j=1;j<=9;j++)
+		if(chbox[head+1].data[j]==0)
+			zero=j;
+			
+	do
+	{	
+	int i;	
+	head++;
+	for(i=1;i<=zero-1;i++)
+		if(chbox[head].data[i]==2)
+		{
+			tail++;
+			chbox[tail]=chbox[head];
+			swap(chbox[tail].data[i],chbox[tail].data[zero]);
+			swap(chbox[tail].data[i+1],chbox[tail].data[zero+1]);
+			chbox[tail].last=head;
+			chbox[tail].dep++;
+			chbox[tail].re=zero;	
+		}
+	for(i=zero+2;i<=9;i++)
+		if(chbox[head].data[i]==1)
+		{
+			tail++;
+			chbox[tail]=chbox[head];
+			swap(chbox[tail].data[i],chbox[tail].data[zero]);
+			swap(chbox[tail].data[i+1],chbox[tail].data[zero+1]);
+			chbox[tail].last=head;
+			chbox[tail].dep++;
+			chbox[tail].re=zero;
+		}
+	if(chbox[head].re==i)
+		tail--;
+	else if((head+1!=tail)&&(chbox[tail].data[zero]==chbox[tail].data[zero+1]))
+		swap(chbox[head+1],chbox[tail]);
+	judge();
+	}while(head<tail);
+	
+	
+}
